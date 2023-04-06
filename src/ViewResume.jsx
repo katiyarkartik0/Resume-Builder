@@ -2,74 +2,52 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux"
 import { updateResume } from "./store/slices/resumeSlice";
 import { cloneDeep, omit } from "lodash"
+import EditEducationalInformation from "./EditComponents/EditEducationalInformation";
+import EditPersonalInformation from "./EditComponents/EditPersonalInformation";
 const ViewResume = () => {
+    const dispatch = useDispatch()
     const resume = useSelector((state) => state.resume);
-    const dispatch = useDispatch();
-    const [editModeActive, setEditModeActive] = useState(false);
     const resumeDetails = resume[0] || {};
-    let { educationalData, professionalData } = resumeDetails;
-    console.log(educationalData, professionalData);
+    let { educationalData,personalInformation, professionalData } = resumeDetails;
+
+    const [editPersonalInfo, setEditPersonalInfo] = useState(false);
+    const [editEducation, setEditEducation] = useState(false);
 
     const renderPersonalInformation = () => {
-        let { personalInformation } = resumeDetails;
-        let updatedResume = {};
-        const handleChange = (e, field) => {
-            personalInformation = { ...personalInformation, [field]: e.target.value };
-            updatedResume = { ...resumeDetails, personalInformation }
-        }
-        return <> {
-            Object.keys(personalInformation).map((field, index) => {
-                if (editModeActive) {
-                    return (
-                        <>
-                            <label htmlFor={field}>{field}</label>
-                            <input type="text" id={field} name={field} placeholder={personalInformation[field]} onChange={(e) => handleChange(e, field)}></input>
-                            <br></br>
-                        </>
-                    )
-                }
-                return (
-                    <>
-                        <h2>{field}</h2>
-                        <h3>{personalInformation[field]}</h3>
-                    </>
-                )
 
-
-            })}
-            {editModeActive &&
+        return <>
+            {editPersonalInfo && <EditPersonalInformation setEditPersonalInfo={setEditPersonalInfo} />}
+            {!editPersonalInfo &&
+                <>
+                    {Object.keys(personalInformation).map((field) => {
+                        return (
+                            <>
+                                <h2>{field}</h2>
+                                <h3>{personalInformation[field]}</h3>
+                            </>
+                        )
+                    })}
+                </> &&
                 <button onClick={() => {
-                    setEditModeActive(false);
-                    if (Object.keys(updateResume).length !== 0) {
-                        dispatch(updateResume(updatedResume));
-                    }
-                }}>Save changes</button>
+                    setEditPersonalInfo(true);
+                }}>Edit PersonalInformation</button>
             }
         </>
     }
 
+
+
     const renderEducationInformation = () => {
         let { educationalData } = resumeDetails;
-        let updatedResume = {}
-        const handleInstituteChange = (e, field) => {
-            const educationalDataClone = cloneDeep(educationalData);
-            const detailsOfField = educationalDataClone[field];
-            const newField = e.target.value;
-            educationalDataClone[newField] = detailsOfField;
-            delete educationalDataClone[field]
-            updatedResume = { ...resumeDetails, educationalData: educationalDataClone };
-            dispatch(updateResume(updatedResume));
-        }
-        const handleInstituteDetailsChange = (e, field, attribute) => {
-            const educationalDataClone = cloneDeep(educationalData);
-            let educationalDataField = educationalDataClone[field];
-            educationalDataField = { ...educationalDataField, [attribute]: e.target.value };
-            educationalDataClone[field] = educationalDataField;
-            updatedResume = { ...resumeDetails, educationalData: educationalDataClone }
+        let updatedResume = resumeDetails;
+        const updateEducationalData = (newInstitute,oldInstitute) => {
+            educationalData = omit(educationalData, [`${oldInstitute}`]);
+            educationalData= {...educationalData,...newInstitute};
+            updatedResume = {...updatedResume,educationalData};
         }
         return <>
             {Object.keys(educationalData).map((field, index) => {
-                if (!editModeActive) {
+                if (!editEducation) {
                     return (
                         <>
                             <h2>institute</h2>
@@ -81,34 +59,22 @@ const ViewResume = () => {
                         </>
                     )
                 }
-                return (
-                    <>
-                        <label htmlFor={field}>institute</label>
-                        <input type="text" id={field} name="institute" placeholder={field}
-                            onChange={(e) => handleInstituteChange(e, field)}></input>
-                        <br></br>
-                        <label htmlFor={educationalData[field].year}>year</label>
-                        <input type="text" id={educationalData[field].year} name="institute"
-                            placeholder={educationalData[field].year}
-                            onChange={(e) => handleInstituteDetailsChange(e, field, "year")}
-                        ></input>
-                        <br></br>
-                        <label htmlFor={educationalData[field].degree}>degree</label>
-                        <input type="text" id={educationalData[field].degree} name="institute"
-                            placeholder={educationalData[field].degree}
-                            onChange={(e) => handleInstituteDetailsChange(e, field, "degree")}
-                        ></input>
-                        <br></br>
-                    </>
-                )
+                return <EditEducationalInformation
+                    educationalData={educationalData} field={field}
+                    updateEducationalData={updateEducationalData}
+                />
+
             })}
-            {editModeActive &&
+            {!editEducation &&
                 <button onClick={() => {
-                    setEditModeActive(false);
-                    if (Object.keys(updateResume).length !== 0) {
-                        dispatch(updateResume(updatedResume));
-                    }
-                }}>Save changes</button>
+                    setEditEducation(true);
+                }}>Edit Education</button>
+            }
+            {editEducation &&
+                <button onClick={() => {
+                    dispatch(updateResume(updatedResume))
+                    setEditEducation(false);
+                }}>SAVE CHANGES</button>
             }
         </>
 
