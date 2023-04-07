@@ -52,3 +52,7 @@ body {
     border: none;
     outline: none;
 }
+
+.error{
+    border-color: red;
+}

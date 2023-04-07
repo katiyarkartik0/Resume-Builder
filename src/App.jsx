@@ -2,7 +2,6 @@ import CreateResume from "./CreateResume";
 import HomePage from "./HomePage";
 import ViewResume from "./ViewResume";
 import { BrowserRouter, Route, Routes } from "react-router-dom"
-import ViewResume from "./ViewResume";
 const App = () => {
     return (
         <>
