@@ -8,7 +8,7 @@ const ViewResume = () => {
     const dispatch = useDispatch()
     const resume = useSelector((state) => state.resume);
     const resumeDetails = resume[0] || {};
-    let { educationalData,personalInformation, professionalData } = resumeDetails;
+    let { personalInformation, professionalData } = resumeDetails;
 
     const [editPersonalInfo, setEditPersonalInfo] = useState(false);
     const [editEducation, setEditEducation] = useState(false);

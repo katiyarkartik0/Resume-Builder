@@ -5,6 +5,8 @@ import ProfessionalInformation from './Components/ProfessionalInformation'
 import { useDispatch, useSelector } from 'react-redux';
 import { addResume } from './store/slices/resumeSlice';
 import { useNavigate } from 'react-router-dom';
+import Skills from './Skills';
+import "./styles.css"
 //use taggit, bootstrap 4.d
 function CreateResume() {
   const navigate = useNavigate();
@@ -78,6 +80,8 @@ function CreateResume() {
 
       <br></br>
       <br></br>
+      <h2>SKILLS</h2>
+      <Skills/>
       <button disabled={disableSubmit} onClick={() => {
         if(personalInformationSubmitted && educationalInformationSubmitted && professionalDataSubmitted){
           dispatch(addResume(resumeData))
