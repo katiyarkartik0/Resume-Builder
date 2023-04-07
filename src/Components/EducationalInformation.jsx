@@ -1,15 +1,24 @@
 import { useEffect, useState } from "react";
+import { v4 as uuid } from 'uuid';
 
-const EducationalInformation = ({updateEducation,allowSubmit}) => {
+const EducationalInformation = ({ updateEducation, allowSubmit }) => {
 
     const [institute, setInstitute] = useState("");
     const [year, setYear] = useState("");
     const [degree, setDegree] = useState("");
 
-    const [disableSubmit,setDisableSubmit] = useState(false)
+    const [disableSubmit, setDisableSubmit] = useState(false)
 
-    const handleSubmit = ()=>{
-        const data = { [institute]: { year: year, degree: degree } }
+    const handleSubmit = () => {
+        const uniqueId = uuid();
+        const data = {
+            [uniqueId]: {
+                institute: institute,
+                year: year,
+                degree: degree
+            }
+        }
+        // const data = { [institute]: { year: year, degree: degree } }
         updateEducation(data);
         setDisableSubmit(true)
     }
@@ -27,7 +36,6 @@ const EducationalInformation = ({updateEducation,allowSubmit}) => {
             <input type="text" id="3" name="degree" value={degree} onChange={(e) => setDegree(e.target.value)}></input>
             <br></br>
             <button disabled={disableSubmit} onClick={handleSubmit}>Submit Education</button>
-
         </>
     )
 }

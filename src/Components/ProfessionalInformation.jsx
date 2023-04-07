@@ -1,13 +1,16 @@
 import { useEffect, useState } from "react";
+import { v4 as uuid } from 'uuid';
 
 const ProfessionalInformation = ({ updateProfessionalInformation, allowSubmit }) => {
     const [company, setCompany] = useState("");
     const [year, setYear] = useState("");
     const [designation, setDesignation] = useState("");
 
-    const [disableSubmit,setDisableSubmmit] = useState(false)
+    const [disableSubmit, setDisableSubmmit] = useState(false)
     const handleSubmit = () => {
-        const data = { [company]: { year: year, designation: designation } }
+        const uniqueId = uuid();
+        const data = { [uniqueId]: { company, year, designation } }
+        // const data = { [company]: { year: year, designation: designation } }
         updateProfessionalInformation(data);
         setDisableSubmmit(true)
     }

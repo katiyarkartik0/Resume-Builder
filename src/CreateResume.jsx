@@ -45,7 +45,10 @@ function CreateResume() {
     setResumeData((prevData) => ({ ...prevData, educationalData, personalInformation, professionalData }))
   }, [educationalData, professionalData, personalInformation])
 
-  console.log(resume)
+  // console.log(resume)
+  useEffect(()=>{
+    console.log(resumeData)
+  },[resumeData])
 
   const renderEducationInformation = () => {
     const fields = [];
