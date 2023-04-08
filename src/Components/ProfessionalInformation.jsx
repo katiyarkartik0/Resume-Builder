@@ -17,7 +17,6 @@ const ProfessionalInformation = ({ updateProfessionalInformation, allowSubmit })
             setError(errorField);
             return;
         }
-        // const data = { [company]: { year: year, designation: designation } }
         updateProfessionalInformation(data);
         setDisableSubmmit(true)
     }

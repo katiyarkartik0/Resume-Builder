@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-const Skills = () => {
+const Skills = ({updateSkills}) => {
 
     const [tags, setTags] = useState([]);
 
@@ -19,6 +19,12 @@ const Skills = () => {
     const removeTag = (index) =>{
         setTags(tags.filter((tag,i)=>i!==index))
     }
+
+    useEffect(()=>{
+        updateSkills(tags);
+    },[tags])
+
+
     return (
         <div className="tags-input-container">
 

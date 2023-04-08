@@ -4,7 +4,7 @@ import EducationalInformation from './Components/EducationalInformation'
 import ProfessionalInformation from './Components/ProfessionalInformation'
 import { useDispatch, useSelector } from 'react-redux';
 import { addResume } from './store/slices/resumeSlice';
-import { useNavigate } from 'react-router-dom';
+import { createSearchParams, useNavigate } from 'react-router-dom';
 import Skills from './Skills';
 import "./styles.css"
 //use taggit, bootstrap 4.d
@@ -23,11 +23,13 @@ function CreateResume() {
   const [professionalFieldCount, setProfessionalFieldCount] = useState(1);
   const [professionalData, setProfessionalData] = useState({});
 
+  const [skills, setSkills] = useState([]);
+
   const [resumeData, setResumeData] = useState({})
 
-  const [personalInformationSubmitted,setPersonalInformationSubmitted] = useState(false);
-  const [educationalInformationSubmitted,setEducationalInformationSubmitted] = useState(false);
-  const [professionalDataSubmitted,setProfessionalDataSubmitted] = useState(false);
+  const [personalInformationSubmitted, setPersonalInformationSubmitted] = useState(false);
+  const [educationalInformationSubmitted, setEducationalInformationSubmitted] = useState(false);
+  const [professionalDataSubmitted, setProfessionalDataSubmitted] = useState(false);
 
   const updatePersonalInformation = (info) => {
     setPersonalInformation((prevData) => ({ ...prevData, ...info }));
@@ -42,13 +44,17 @@ function CreateResume() {
     setProfessionalDataSubmitted(true);
   }
   useEffect(() => {
-    setResumeData((prevData) => ({ ...prevData, educationalData, personalInformation, professionalData }))
-  }, [educationalData, professionalData, personalInformation])
+    setResumeData((prevData) => ({ ...prevData, educationalData, personalInformation, professionalData, skills }))
+  }, [educationalData, professionalData, personalInformation, skills])
 
   // console.log(resume)
-  useEffect(()=>{
+  useEffect(() => {
     console.log(resumeData)
-  },[resumeData])
+  }, [resumeData])
+
+  const updateSkills = (info) => {
+    setSkills(info);
+  }
 
   const renderEducationInformation = () => {
     const fields = [];
@@ -84,14 +90,15 @@ function CreateResume() {
       <br></br>
       <br></br>
       <h2>SKILLS</h2>
-      <Skills/>
+      <Skills updateSkills={updateSkills} />
       <button disabled={disableSubmit} onClick={() => {
-        if(personalInformationSubmitted && educationalInformationSubmitted && professionalDataSubmitted){
+        if (personalInformationSubmitted && educationalInformationSubmitted && professionalDataSubmitted) {
           dispatch(addResume(resumeData))
           setDisableSubmit(true)
-          navigate("/viewResume")
+          const params = "?resumeFilled=true"
+          navigate(`${"/viewResume"+params}`)
         }
-        }} >SUBMIT</button>
+      }} >SUBMIT</button>
     </form>
   )
 }
