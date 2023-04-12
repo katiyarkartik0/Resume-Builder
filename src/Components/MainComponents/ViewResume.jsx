@@ -1,10 +1,11 @@
 import { useSelector } from "react-redux";
-import PersonalInformation from "./DisplayComponenets/PersonalInformation";
-import EducationalInformation from "./DisplayComponenets/EducationalInformation";
-import ProfessionalInformation from "./DisplayComponenets/ProfessionalInformation";
-import Skills from "./DisplayComponenets/Skills";
-import { redirect, useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useEffect } from "react";
+
+import PersonalInformation from "../ViewResumeComponenets/PersonalInformation";
+import EducationalInformation from "../ViewResumeComponenets/EducationalInformation";
+import ProfessionalInformation from "../ViewResumeComponenets/ProfessionalInformation";
+import Skills from "../ViewResumeComponenets/Skills";
 
 const ViewResume = () => {
     const resume = useSelector((state) => state.resume);
@@ -43,17 +44,23 @@ const ViewResume = () => {
 
 
     return (
-        <>
-            <h1>Personal</h1>
+        <div className="resumeView">
+            <p className="h3 font-italic">Personal Information</p>
+            <hr></hr>
             {renderPersonalInformation()}
-            <h1>Educational</h1>
+            <hr></hr>
+            <p className="h3 font-italic">Educational Information</p>
+            <hr></hr>
             {renderEducationalInformation()}
-            <h1>Professional</h1>
+            <hr></hr>
+            <p className="h3 font-italic">Professional Information</p>
+            <hr></hr>
             {renderProfessionalInformation()}
-            <h1>Skills</h1>
+            <hr></hr>
+            <p className="h3 font-italic">Skills</p>
+            <hr></hr>
             {renderSkills()}
-            <button> navigate("/createResume")</button>
-        </>
+        </div>
     )
 }
 

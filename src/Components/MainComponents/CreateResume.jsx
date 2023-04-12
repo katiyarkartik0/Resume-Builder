@@ -1,13 +1,15 @@
 import { useEffect, useState } from 'react'
-import PersonalInformation from './Components/PersonalInformation'
-import EducationalInformation from './Components/EducationalInformation'
-import ProfessionalInformation from './Components/ProfessionalInformation'
 import { useDispatch, useSelector } from 'react-redux';
-import { addResume } from './store/slices/resumeSlice';
-import { createSearchParams, useNavigate } from 'react-router-dom';
-import Skills from './Skills';
+import { useNavigate } from 'react-router-dom';
+import { addResume } from '../../store/slices/resumeSlice';
+
+import EducationalInformation from '../FormComponents/EducationalInformation';
+import PersonalInformation from '../FormComponents/PersonalInformation';
+import ProfessionalInformation from '../FormComponents/ProfessionalInformation';
+import Skills from '../FormComponents/Skills';
+
 import "./styles.css"
-//use taggit, bootstrap 4.d
+
 function CreateResume() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -73,33 +75,49 @@ function CreateResume() {
   }
 
   return (
+    <>
+    <h1>CREATE RESUME</h1>
     <form className="App" onSubmit={(e) => {
       e.preventDefault()
     }}>
-      <h2>Personal Information</h2>
-      <PersonalInformation updatePersonalInformation={updatePersonalInformation} />
+      <div className='form'>
+        <h2>Personal Information</h2>
+        <PersonalInformation updatePersonalInformation={updatePersonalInformation} />
+        <br></br>
+        <br></br>
+        <h2>Educational Background</h2>
+        {renderEducationInformation()}
+        <br></br>
+        <br></br>
+        <button className='btn btn-outline-primary' onClick={() => setEducationFieldCount(educationFieldCount + 1)}>Add education</button>
+        <br></br>
+        <br></br>
+        <h2>Professional Background</h2>
+        {renderProfessionalInformation()}
+        <br></br>
+        <br></br>
+        <button className='btn btn-outline-primary' onClick={() => setProfessionalFieldCount(professionalFieldCount + 1)}>Add experience</button>
 
-      <h2>Educational Background</h2>
-      {renderEducationInformation()}
-      <button onClick={() => setEducationFieldCount(educationFieldCount + 1)}>Add education</button>
-
-      <h2>Professional Background</h2>
-      {renderProfessionalInformation()}
-      <button onClick={() => setProfessionalFieldCount(professionalFieldCount + 1)}>Add experience</button>
-
-      <br></br>
-      <br></br>
-      <h2>SKILLS</h2>
-      <Skills updateSkills={updateSkills} />
-      <button disabled={disableSubmit} onClick={() => {
-        if (personalInformationSubmitted && educationalInformationSubmitted && professionalDataSubmitted) {
-          dispatch(addResume(resumeData))
-          setDisableSubmit(true)
-          const params = "?resumeFilled=true"
-          navigate(`${"/viewResume"+params}`)
-        }
-      }} >SUBMIT</button>
+        <br></br>
+        <br></br>
+        <h2>SKILLS</h2>
+        <Skills updateSkills={updateSkills} />
+        <br></br>
+        <br></br>
+        <button className='btn btn-primary' disabled={disableSubmit} onClick={() => {
+          if (personalInformationSubmitted && educationalInformationSubmitted && professionalDataSubmitted) {
+            dispatch(addResume(resumeData))
+            setDisableSubmit(true)
+            const params = "?resumeFilled=true"
+            navigate(`${"/viewResume" + params}`)
+          }
+          else{
+            alert("You might have missed to fill some fields")
+          }
+        }} >SUBMIT FORM</button>
+      </div>
     </form>
+    </>
   )
 }
 
